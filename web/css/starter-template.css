@@ -1,0 +1,43 @@
+body {
+    background:url('https://i.stack.imgur.com/spmUM.gif') no-repeat center center fixed;
+    background-size: cover;
+    padding-top: 70px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.info {
+  text-align: center;
+  color: whitesmoke;
+}
+
+
+.trailer{
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.p {
+    text-align: center;
+    padding-top: 140px;
+    font-size: 14px;
+}
+
+@media screen and (max-width: 600px) {
+    table {width:100%;}
+    thead {display: none;}
+    tr:nth-of-type(2n) {background-color: inherit;}
+    tr td:first-child {background: #f0f0f0; font-weight:bold;font-size:1.3em;}
+    tbody td {display: block;  text-align:center;}
+    tbody td:before {
+        content: attr(data-th);
+        display: block;
+        text-align:center;
+    }
+}
