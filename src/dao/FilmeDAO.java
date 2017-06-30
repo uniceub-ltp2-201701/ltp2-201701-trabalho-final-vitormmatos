@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -107,7 +108,7 @@ public class FilmeDAO{
         return filmes;
     }
 
-    public ArrayList<Filme> listarFilmesPessoa(int idPessoa){
+    public ArrayList<Filme> listarFilmesPessoa(int idPessoa) throws FileNotFoundException {
         //Criar objeto de retorno
         //Criar objetos de acesso a BD
 
@@ -130,7 +131,9 @@ public class FilmeDAO{
                     rs.close();
                 }
                 ps.close();
-                return filmes;
+                if(!filmes.isEmpty()){
+                    return filmes;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,12 +158,40 @@ public class FilmeDAO{
                     rs.close();
                 }
                 ps.close();
-                return filmes;
+                if(!filmes.isEmpty()){
+                    return filmes;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        try {
+            try (PreparedStatement ps = conexao.prepareStatement("SELECT p.idPessoa, f.idFilme, f.nome, f.dataLancamento, f.faixaEtaria, f.trailerLink, f.cartazLink, f.sinopse FROM catalogo_filmes.roteirista_filme AS r, catalogo_filmes.filme AS f, catalogo_filmes.pessoa AS p WHERE f.idFilme = r.idFilme AND p.idPessoa = r.idPessoa AND p.idPessoa = ?")) {
+                ps.setInt(1, idPessoa);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Filme filme = new Filme();
+                        filme.setIdFilme(rs.getInt("idFilme"));
+                        filme.setNome(rs.getString("nome"));
+                        filme.setFaixaEtaria(rs.getInt("faixaEtaria"));
+                        filme.setDataLanc(rs.getDate("dataLancamento"));
+                        filme.setCartazLink(rs.getString("cartazLink"));
+                        filme.setSinopse(rs.getString("sinopse"));
+                        filme.setCartazLink(rs.getString("cartazLink"));
+                        filme.setSinopse(rs.getString("sinopse"));
+                        filmes.add(filme);
+                    }
+                    rs.close();
+                }
+                ps.close();
+                if(!filmes.isEmpty()){
+                    return filmes;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }
