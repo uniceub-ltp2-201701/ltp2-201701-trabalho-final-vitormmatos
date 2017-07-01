@@ -88,15 +88,16 @@ public class FilmeDAO{
             try (PreparedStatement ps = conexao.prepareStatement("SELECT f.idFilme, f.nome, f.dataLancamento, f.faixaEtaria, f.trailerLink, f.cartazLink, f.sinopse FROM catalogo_filmes.genero_filme AS gf, catalogo_filmes.filme AS f WHERE gf.idFilme = f.idFilme AND gf.idGenero = ?")) {
                 ps.setInt(1, idGenero);
                 try (ResultSet rs = ps.executeQuery()) {
-                    rs.next();
-                    Filme filme = new Filme();
-                    filme.setIdFilme(rs.getInt("idFilme"));
-                    filme.setNome(rs.getString("nome"));
-                    filme.setFaixaEtaria(rs.getInt("faixaEtaria"));
-                    filme.setDataLanc(rs.getDate("dataLancamento"));
-                    filme.setCartazLink(rs.getString("cartazLink"));
-                    filme.setSinopse(rs.getString("sinopse"));
-                    filmes.add(filme);
+                    while (rs.next()){
+                        Filme filme = new Filme();
+                        filme.setIdFilme(rs.getInt("idFilme"));
+                        filme.setNome(rs.getString("nome"));
+                        filme.setFaixaEtaria(rs.getInt("faixaEtaria"));
+                        filme.setDataLanc(rs.getDate("dataLancamento"));
+                        filme.setCartazLink(rs.getString("cartazLink"));
+                        filme.setSinopse(rs.getString("sinopse"));
+                        filmes.add(filme);
+                    }
                     rs.close();
                 }
                 ps.close();
